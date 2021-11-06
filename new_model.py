@@ -5,7 +5,6 @@ from keras import layers
 from extensions.FileAudioDataGenerator import FileAudioDataGenerator
 from extensions.MelSpecLayer import MelSpec
 from utils import plotter
-# TODO: This goes to config class
 from utils.Config import Config
 
 config = Config(train_dir='/home/alvaro/Documents/ML/whispering/dataset/dataset/train',
