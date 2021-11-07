@@ -3,11 +3,12 @@ from tensorflow.keras import models
 
 from extensions import FileAudioDataGenerator
 from extensions.MelSpecLayer import MelSpec
+from extensions.MinMaxNormalizationLayer import MinMaxNormalization
 from utils.Config import Config
 
 config = Config(train_dir=None, val_dir=None, test_dir=None)
 new_model = models.load_model(config.model_path,
-                              custom_objects={'MelSpec': MelSpec})
+                              custom_objects={'MelSpec': MelSpec, 'MinMaxNormalization': MinMaxNormalization})
 
 
 def predict_from_wav(filename):
@@ -24,6 +25,7 @@ def predict_from_wav(filename):
             print('WHISPERING!!!!', prediction)
         else:
             print('talking', prediction)
+
 
 predict_from_wav('/home/alvaro/Music/normal_test.wav')
 predict_from_wav('/home/alvaro/Music/whisper.wav')

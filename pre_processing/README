@@ -1,0 +1,7 @@
+# Useful commands
+## Extract voice segments from an audio
+` python3.8 extract_voice.py 2 input.wav output/path`
+
+## Extract mono voice audio from stereo
+
+`sox input_stereo.wav output_mono.wav remix 1`

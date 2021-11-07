@@ -3,7 +3,7 @@ class Config:
                  train_dir,
                  val_dir,
                  test_dir,
-                 normalize=True,
+                 normalize=False,
                  rms_level=0,
                  normalization_technique='min_max',
                  max_length_sec=4.2,
