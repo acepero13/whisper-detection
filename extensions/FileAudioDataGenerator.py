@@ -12,20 +12,14 @@ class FileAudioDataGenerator(keras.utils.Sequence):
                  max_length_secs=4.2,
                  class_mode='binary',
                  sr=22050,
-                 shuffle=True,
-                 normalize=True,
-                 normalization_technique='min_max',
-                 rms_level=0):
+                 shuffle=True):
         self.directory = directory
         self.batch_size = batch_size
         self.max_length = int(max_length_secs * sr)
         self.shuffle = shuffle
         self.class_mode = class_mode
         self.sr = sr
-        self.normalize = normalize
-        self.rms_level = rms_level
         self.labels_dict = dict()
-        self.normalization_technique = normalization_technique
 
         self.folders = [os.path.join(directory, name) for name in os.listdir(directory) if
                         os.path.isdir(os.path.join(directory, name))]
@@ -58,9 +52,6 @@ class FileAudioDataGenerator(keras.utils.Sequence):
         label_name = os.path.basename(folder)
         audio_file, sr = librosa.load(file_path, sr=self.sr)
         audio_file = librosa.util.fix_length(audio_file, self.max_length)
-        if self.normalize:
-            audio_file = self.__normalize(audio_file, self.rms_level,
-                                          normalization_technique=self.normalization_technique)
 
         if label_name in self.labels_dict:
             return audio_file, self.labels_dict[label_name]
@@ -86,7 +77,7 @@ class FileAudioDataGenerator(keras.utils.Sequence):
             xx, yy = self.__read_wav_file(filename[0], filename[1])
 
             # Store class
-            x[i,] = xx
+            x[i, ] = xx
             y[i] = yy
             # np.append(y, yy)
 
@@ -110,65 +101,8 @@ class FileAudioDataGenerator(keras.utils.Sequence):
         return self.sr
 
     @staticmethod
-    def read_wav(filename, sr=22050, normalize=True, rms_level=0, max_length_sec=4.2,
-                 normalization_technique='min_max'):
+    def read_wav(filename, sr=22050, max_length_sec=4.2):
         max_length = int(max_length_sec * sr)
         audio_file, sr = librosa.load(filename, sr=sr)
         audio_file = librosa.util.fix_length(audio_file, max_length)
-        if normalize:
-            audio_file = FileAudioDataGenerator.__normalize(audio_file, rms_level,
-                                                            normalization_technique=normalization_technique)
         return audio_file, sr, max_length
-
-    @staticmethod
-    def __normalize(sig, rms_level=0, normalization_technique='peak'):
-        """
-        Normalize the signal given a certain technique (peak or rms).
-        Args:
-            - infile    (str) : input filename/path.
-            - rms_level (int) : rms level in dB.
-        """
-        """
-            Normalize the signal given a certain technique (peak or rms).
-            Args:
-                - infile                  (str) : input filename/path.
-                - normalization_technique (str) : type of normalization technique to use. (default is peak)
-                - rms_level               (int) : rms level in dB.
-            """
-        # read input file
-        y = sig
-        # normalize signal
-        if normalization_technique == "peak":
-            y = sig / np.max(sig)
-
-        elif normalization_technique == "rms":
-            # linear rms level and scaling factor
-            r = 10 ** (rms_level / 10.0)
-            a = np.sqrt((len(sig) * r ** 2) / np.sum(sig ** 2))
-
-            # normalize
-            y = sig * a
-
-        elif normalization_technique == 'min_max':
-            normalizer = Normalizer(0, 1)
-            y = normalizer.normalise(sig)
-        else:
-            print("ParameterError: Unknown normalization_technique variable.")
-
-        return y
-
-
-class Normalizer:
-    def __init__(self, min_val, max_val):
-        self.min = min_val
-        self.max = max_val
-
-    def normalise(self, array):
-        norm_array = (array - array.min()) / (array.max() - array.min())
-        norm_array = norm_array * (self.max - self.min) + self.min
-        return norm_array
-
-    def denormalise(self, norm_array, original_min, original_max):
-        array = (norm_array - self.min) / (self.max - self.min)
-        array = array * (original_max - original_min) + original_min
-        return array

@@ -54,7 +54,7 @@ def plot_results(history):
 def build_simple_model(sr):
     model = models.Sequential()
     model.add(MelSpec(sampling_rate=sr, input_shape=config.input_shape))
-    model.add(MinMaxNormalization(0, 1))
+    model.add(MinMaxNormalization())
     model.add(layers.Flatten())
     model.add(layers.Dense(64, activation='relu'))
     model.add(layers.Dense(128, activation='relu'))

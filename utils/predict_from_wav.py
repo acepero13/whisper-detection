@@ -14,9 +14,6 @@ new_model = models.load_model(config.model_path,
 def predict_from_wav(filename):
     if filename.endswith(".wav"):
         wav_file, sr, max_length = FileAudioDataGenerator.FileAudioDataGenerator.read_wav(filename,
-                                                                                          normalize=config.normalize,
-                                                                                          rms_level=config.rms_level,
-                                                                                          normalization_technique=config.normalization_technique,
                                                                                           max_length_sec=config.max_length_sec)
         pred = new_model.predict(np.reshape(wav_file, (1, max_length)))
         prediction = pred[0][0]

@@ -3,9 +3,6 @@ class Config:
                  train_dir,
                  val_dir,
                  test_dir,
-                 normalize=False,
-                 rms_level=0,
-                 normalization_technique='min_max',
                  max_length_sec=4.2,
                  train_batch_size=32,
                  val_test_batch_size=32,
@@ -17,10 +14,7 @@ class Config:
         self.train_dir = train_dir
         self.val_dir = val_dir
         self.test_dir = test_dir
-        self.normalize = normalize
         self.input_shape = input_shape
-        self.rms_level = rms_level
-        self.normalization_technique = normalization_technique
         self.max_length_sec = max_length_sec
         self.train_batch_size = train_batch_size
         self.val_test_batch_size = val_test_batch_size
