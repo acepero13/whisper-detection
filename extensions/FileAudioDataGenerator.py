@@ -33,11 +33,9 @@ class FileAudioDataGenerator(keras.utils.Sequence):
 
         if class_mode == 'binary':
             assert len(self.folders) == 2
-        self.x = []
-        self.y = []
         self.filenames = []
         self.__fill_data()
-        random.shuffle(self.filenames)  # randomize
+        random.shuffle(self.filenames)
 
         self.n = len(self.filenames)
 

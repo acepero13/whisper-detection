@@ -26,8 +26,8 @@ def predict_from_wav(filename):
 
 predict_from_wav('/home/alvaro/Music/normal_test.wav')
 predict_from_wav('/home/alvaro/Music/whisper.wav')
-predict_from_wav('/home/alvaro/Music/whisper3_test.wav')
-predict_from_wav('/home/alvaro/Music/whisper2.wav')
+predict_from_wav('/home/alvaro/Music/whisper4_test.wav')
+predict_from_wav('/home/alvaro/Music/whisper4.wav')
 predict_from_wav('/home/alvaro/Music/whisper2_test.wav')
 predict_from_wav(
     '/home/alvaro/Documents/ML/whispering/dataset/dataset/test/whisper/4abd7cf4f7e10b5d91570fdb4b9e8138.wav')

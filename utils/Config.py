@@ -3,12 +3,12 @@ class Config:
                  train_dir,
                  val_dir,
                  test_dir,
-                 max_length_sec=4.2,
+                 max_length_sec=2.4,
                  train_batch_size=32,
                  val_test_batch_size=32,
                  input_shape=(92610,),
                  epochs=4,
-                 model_path='/home/alvaro/Documents/ML/whispering/src/models/simple_new_model_v1_1.h5'
+                 model_path='/home/alvaro/Documents/ML/whispering/src/models/simple_new_model_more_data_v1_1.h5'
 
                  ):
         self.train_dir = train_dir
