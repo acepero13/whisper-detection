@@ -15,7 +15,7 @@ config = Config(train_dir=None, val_dir=None, test_dir=None)
 FILENAME = 'my_audio.wav'
 
 
-class bcolors:
+class ConsoleColors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
     OKCYAN = '\033[96m'
@@ -25,6 +25,26 @@ class bcolors:
     ENDC = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
+
+    @staticmethod
+    def warning(msg: str):
+        ConsoleColors.__print(msg, ConsoleColors.FAIL)
+
+    @staticmethod
+    def success(msg: str):
+        ConsoleColors.__print(msg, ConsoleColors.OKGREEN)
+
+    @staticmethod
+    def __print(msg: str, color):
+        print(f"{color}" + msg + f"{ConsoleColors.ENDC}")
+
+    @staticmethod
+    def green(msg: str):
+        ConsoleColors.success(msg)
+
+    @staticmethod
+    def red(msg: str):
+        ConsoleColors.warning(msg)
 
 
 class Recorder:
@@ -36,7 +56,7 @@ class Recorder:
 
     def rec(self):
 
-        print(f"{bcolors.OKGREEN}start recording{bcolors.ENDC}")
+        ConsoleColors.green('start recording')
         time.sleep(0.2)
         my_data = sd.rec(int(self.sr * self.duration), samplerate=self.sr,
                          channels=2, blocking=True)
@@ -51,9 +71,9 @@ class Recorder:
         prediction = pred[0][0]
 
         if prediction > 0.5:
-            print(f"{bcolors.OKGREEN}YOU WERE WHISPERING!!!!{bcolors.ENDC}")
+            ConsoleColors.green('YOU WERE WHISPERING!!!!')
         else:
-            print(f"{bcolors.FAIL}you were talking :){bcolors.ENDC}")
+            ConsoleColors.red('you were talking :)')
 
 
 r = Recorder()
