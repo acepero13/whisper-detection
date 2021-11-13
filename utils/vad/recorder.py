@@ -1,4 +1,3 @@
-
 import pyaudio
 import wave
 
@@ -20,16 +19,16 @@ LAST_NOTIFICATION_TIME = None
 
 
 def record(duration):
-    '''Records Input From Microphone Using PyAudio'''
+    """Records Input From Microphone Using PyAudio"""
     print(PYAUDIO_INSTANCE)
     try:
         in_stream = open_channel()
         save_temp_wav(duration, in_stream)
     except IOError as err:
-        print ("Error", err)
+        print("Error", err)
         raise err
     in_stream.close()
-    print ("End recording")
+    print("End recording")
 
 
 def save_temp_wav(duration, in_stream):

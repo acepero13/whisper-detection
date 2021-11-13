@@ -6,7 +6,7 @@ import sounddevice as sd
 import soundfile as sf
 from tensorflow.keras import models
 
-from extensions import FileAudioDataGenerator
+from extensions.FileAudioDataGenerator import FileAudioDataGenerator
 from extensions.MelSpecLayer import MelSpec
 from extensions.MinMaxNormalizationLayer import MinMaxNormalization
 from utils.Config import Config
@@ -17,12 +17,12 @@ FILENAME = 'my_audio.wav'
 
 class ConsoleColors:
     HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKCYAN = '\033[96m'
-    OKGREEN = '\033[92m'
+    OK_BLUE = '\033[94m'
+    OK_CYAN = '\033[96m'
+    OK_GREEN = '\033[92m'
     WARNING = '\033[93m'
     FAIL = '\033[91m'
-    ENDC = '\033[0m'
+    END_C = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
@@ -32,11 +32,11 @@ class ConsoleColors:
 
     @staticmethod
     def success(msg: str):
-        ConsoleColors.__print(msg, ConsoleColors.OKGREEN)
+        ConsoleColors.__print(msg, ConsoleColors.OK_GREEN)
 
     @staticmethod
     def __print(msg: str, color):
-        print(f"{color}" + msg + f"{ConsoleColors.ENDC}")
+        print(f"{color}" + msg + f"{ConsoleColors.END_C}")
 
     @staticmethod
     def green(msg: str):
@@ -64,11 +64,11 @@ class Recorder:
         self.predict()
 
     def predict(self):
-        wav_file, sr, max_length = FileAudioDataGenerator.FileAudioDataGenerator.read_wav(FILENAME,
-                                                                                          max_length_sec=config.max_length_sec)
+        wav_file, sr, max_length = FileAudioDataGenerator.read_wav(FILENAME,
+                                                                   max_length_sec=config.max_length_sec)
         wav_file = librosa.util.fix_length(wav_file, config.max_length)
-        pred = self.model.predict(np.reshape(wav_file, (1, config.max_length)))
-        prediction = pred[0][0]
+        model_prediction = self.model.predict(np.reshape(wav_file, (1, config.max_length)))
+        prediction = model_prediction[0][0]
 
         if prediction > 0.5:
             ConsoleColors.green('YOU WERE WHISPERING!!!!')
@@ -76,5 +76,6 @@ class Recorder:
             ConsoleColors.red('you were talking :)')
 
 
-r = Recorder()
-r.rec()
+if __name__ == '__main__':
+    r = Recorder()
+    r.rec()

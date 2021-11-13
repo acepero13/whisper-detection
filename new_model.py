@@ -65,4 +65,5 @@ def build_simple_model(sr):
     return model
 
 
-train()
+if __name__ == '__main__':
+    train()
