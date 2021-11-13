@@ -39,15 +39,15 @@ class Recorder:
         print(f"{bcolors.OKGREEN}start recording{bcolors.ENDC}")
         time.sleep(0.2)
         my_data = sd.rec(int(self.sr * self.duration), samplerate=self.sr,
-                        channels=2, blocking=True)
+                         channels=2, blocking=True)
         sf.write(FILENAME, my_data, self.sr)
         self.predict()
 
     def predict(self):
         wav_file, sr, max_length = FileAudioDataGenerator.FileAudioDataGenerator.read_wav(FILENAME,
                                                                                           max_length_sec=config.max_length_sec)
-        wav_file = librosa.util.fix_length(wav_file, 92610)
-        pred = self.model.predict(np.reshape(wav_file, (1, 92610)))
+        wav_file = librosa.util.fix_length(wav_file, config.max_length)
+        pred = self.model.predict(np.reshape(wav_file, (1, config.max_length)))
         prediction = pred[0][0]
 
         if prediction > 0.5:

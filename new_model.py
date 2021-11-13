@@ -15,16 +15,19 @@ config = Config(train_dir='/home/alvaro/Documents/ML/whispering/dataset/dataset/
 def load_data():
     train_datagen = FileAudioDataGenerator(config.train_dir,
                                            batch_size=config.train_batch_size,
+                                           max_length_secs=config.max_length_sec,
                                            class_mode='binary',
                                            shuffle=False)
 
     val_datagen = FileAudioDataGenerator(config.val_dir,
                                          batch_size=config.val_test_batch_size,
+                                         max_length_secs=config.max_length_sec,
                                          class_mode='binary',
                                          shuffle=False)
 
     test_datagen = FileAudioDataGenerator(config.test_dir,
                                           batch_size=config.val_test_batch_size,
+                                          max_length_secs=config.max_length_sec,
                                           class_mode='binary',
                                           shuffle=False)
 
