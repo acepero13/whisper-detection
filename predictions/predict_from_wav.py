@@ -46,9 +46,11 @@ if __name__ == '__main__':
     predict_from_wav('/home/alvaro/Music/whisper4.wav', 'whisper')
     predict_from_wav('/home/alvaro/Music/whisper2_test.wav', 'whisper')
     predict_from_wav(
-        '/home/alvaro/Documents/ML/whispering/dataset/dataset/test/whisper/0bbb1366f2928815d0cf64cda0fb4971.wav', 'whisper')
+        '/home/alvaro/Documents/ML/whispering/dataset/dataset/test/whisper/0bbb1366f2928815d0cf64cda0fb4971.wav',
+        'whisper')
     predict_from_wav(
-        '/home/alvaro/Documents/ML/whispering/dataset/dataset/test/whisper/97c060dad2b4bac26836d91bf8e5130d.wav', 'whisper')
+        '/home/alvaro/Documents/ML/whispering/dataset/dataset/test/whisper/97c060dad2b4bac26836d91bf8e5130d.wav',
+        'whisper')
 
     predict_from_wav(
         '/home/alvaro/Documents/ML/datasets/audio/emotion/ravdess/Actor_01/03-01-02-01-01-02-01.wav',

@@ -25,13 +25,13 @@ MH_SAMPLES_PER_FRAME = int(MH_SAMPLES_PER_SECOND * (MH_FRAME_DURATION / 1000.0))
 
 
 def chunk_frames_indices(samples, samples_per_frame):
-    '''
+    """
     Args:
         - samples: 16 bit values representing a sampled point.
 
     Returns:
         - an array of <FRAME_DURATION> length chunks
-    '''
+    """
     return zip(
         range(0, len(samples), samples_per_frame),
         range(samples_per_frame, len(samples), samples_per_frame)
@@ -39,18 +39,18 @@ def chunk_frames_indices(samples, samples_per_frame):
 
 
 def energy(samples):
-    '''
+    """
     Args:
         - samples of a signal
-    '''
+    """
     return sum([x ** 2 for x in samples])
 
 
 def real_imaginary_freq_domain(samples):
-    '''
+    """
     Apply fft on the samples and return the real and imaginary
     parts in separate
-    '''
+    """
     freq_domain = fft(samples)
     freq_domain_real = [abs(x.real) for x in freq_domain]
     freq_domain_imag = [abs(x.imag) for x in freq_domain]
@@ -59,13 +59,13 @@ def real_imaginary_freq_domain(samples):
 
 
 def get_dominant_freq(real_freq_domain_part, imag_freq_domain_part):
-    '''Returns the dominant frequency'''
+    """Returns the dominant frequency"""
     max_real = max(real_freq_domain_part)
     max_imag = max(imag_freq_domain_part)
 
     dominant_freq = 0
 
-    if (max_real > max_imag):
+    if max_real > max_imag:
         dominant_freq = abs(
             fftfreq(len(real_freq_domain_part), d=(1.0 / 44100.0))[real_freq_domain_part.index(max_real)])
     else:
@@ -76,7 +76,7 @@ def get_dominant_freq(real_freq_domain_part, imag_freq_domain_part):
 
 
 def get_freq_domain_magnitudes(real_part, imaginary_part):
-    '''Magnitudes of the real-imag frequencies'''
+    """Magnitudes of the real-imag frequencies"""
     return [sqrt(x ** 2 + y ** 2) for x, y in zip(real_part, imaginary_part)]
 
 
@@ -84,7 +84,7 @@ def get_sfm(frequencies):
     try:
         return 10 * log10(geometric_mean(frequencies) / arithmetic_mean(frequencies))
     except ZeroDivisionError as err:
-        print (err)
+        print(err)
         raise ZeroDivisionError
 
 
@@ -105,12 +105,12 @@ def get_sample_intensity(samples):
 class VAD(object):
     @staticmethod
     def moattar_homayounpour(wave_file, average_intensity, instances):
-        '''
+        """
         Args:
             - wave_file : filename containing the audio to be processes
             - average_intensity : former average_intensity set by the user (we supply an updated value)
             - instances : number of times this VAD was run was previously
-        '''
+        """
         in_file = wave.open(wave_file, 'rb')
 
         # set primary thresholds for energy, frequency and SFM
@@ -122,7 +122,7 @@ class VAD(object):
         n_frames = in_file.getnframes()
 
         samples = in_file.readframes(n_frames)
-        abs_samples = struct.unpack("%dh" % (n_frames), samples)
+        abs_samples = struct.unpack("%dh" % n_frames, samples)
 
         # compute the intensity
         intensity = get_sample_intensity(abs_samples)
@@ -212,9 +212,9 @@ class VAD(object):
             instances)  # update average intensity
 
         if locateInArray(frame_voiced, [1, 1, 1, 1, 1]) >= 0 and intensity > old_average_intensity:
-            return (True, average_intensity)
+            return True, average_intensity
 
-        return (False, average_intensity)
+        return False, average_intensity
 
 
 def locateInArray(list1, list2):
@@ -240,7 +240,7 @@ if __name__ == "__main__":
     counter_instance = 0
     while True:
         record(DURATION)
-        print ("Calling moattar")
+        print("Calling moattar")
         notify_or_not, AVERAGE_INTENSITY_OF_RUNS = VAD.moattar_homayounpour(OUTPUT_FILE, 0, counter_instance)
         counter_instance += 1
-        print ("Speaking: ", notify_or_not)
+        print("Speaking: ", notify_or_not)
