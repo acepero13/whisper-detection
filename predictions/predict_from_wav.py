@@ -20,7 +20,7 @@ def predict_from_wav(filename, expected):
         prediction = model_prediction[0][0]
 
         if prediction > 0.5:
-            print_whisper_result(expected, prediction)
+            print_whisper_prediction(expected, prediction)
         else:
             print_talking_prediction(expected, prediction)
 
@@ -32,7 +32,7 @@ def print_talking_prediction(expected, prediction):
         Colors.warning('Expected:' + expected + ' -> TALKING :(' + str(prediction))
 
 
-def print_whisper_result(expected, prediction):
+def print_whisper_prediction(expected, prediction):
     if expected == 'whisper':
         Colors.green('WHISPERING!!!! ' + str(prediction))
     else:
@@ -56,7 +56,3 @@ if __name__ == '__main__':
         '/home/alvaro/Documents/ML/datasets/audio/emotion/ravdess/Actor_01/03-01-02-01-01-02-01.wav',
         'talking')
 
-# img2wav('/home/alvaro/Music/whisper.wav')
-# img2wav('/home/alvaro/Documents/ML/whispering/dataset/wav/whisper/8d52965e9327ef3fb6be286d7a513290.wav')
-# img2wav('/home/alvaro/Documents/ML/whispering/thorsten-emotional_v02/whisper/4abd7cf4f7e10b5d91570fdb4b9e8138.wav')
-# img2wav('/home/alvaro/Documents/ML/whispering/thorsten-emotional_v02/neutral/0aaf116f8774a140909231e0b610dc98.wav')

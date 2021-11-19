@@ -1,6 +1,6 @@
 import os
 import random
-
+from tensorflow.keras.utils import to_categorical
 import librosa
 import numpy as np
 from tensorflow import keras
@@ -25,11 +25,7 @@ class FileAudioDataGenerator(keras.utils.Sequence):
                         os.path.isdir(os.path.join(directory, name))]
 
         self.folders.sort()
-        cont = 0
-        for folder in self.folders:
-            label_name = os.path.basename(folder)
-            self.labels_dict[label_name] = cont
-            cont += 1
+        self.load_classes()
 
         if class_mode == 'binary':
             assert len(self.folders) == 2
@@ -38,6 +34,13 @@ class FileAudioDataGenerator(keras.utils.Sequence):
         random.shuffle(self.filenames)
 
         self.n = len(self.filenames)
+
+    def load_classes(self):
+        cont = 0
+        for folder in self.folders:
+            label_name = os.path.basename(folder)
+            self.labels_dict[label_name] = cont
+            cont += 1
 
     def __fill_data(self):
         for folder in self.folders:
@@ -52,11 +55,12 @@ class FileAudioDataGenerator(keras.utils.Sequence):
         audio_file = librosa.util.fix_length(audio_file, self.max_length)
 
         if label_name in self.labels_dict:
-            return audio_file, self.labels_dict[label_name]
+            y = self.labels_dict[label_name]
         else:
             self.labels_dict[label_name] = len(self.labels_dict.keys())
+            y = self.labels_dict[label_name]
 
-        return audio_file, self.labels_dict[label_name]
+        return audio_file, y
 
     def on_epoch_end(self):
         pass
@@ -77,14 +81,13 @@ class FileAudioDataGenerator(keras.utils.Sequence):
             # Store class
             x[i, ] = xx
             y[i] = yy
-            # np.append(y, yy)
 
-        if self.labels_dict['whisper'] != 1:
-            print("!!!!!!!!!", self.labels_dict)
+        if self.class_mode == 'categorical':
+            y = to_categorical(y, num_classes=len(self.labels_dict))
+
         return x, y
 
     def __getitem__(self, index):
-        # returns X,y
         batches = self.filenames[index * self.batch_size:(index + 1) * self.batch_size]
         result = self.__data_generation(batches)
         return result

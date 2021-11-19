@@ -34,6 +34,3 @@ class MinMaxNormalization(keras.layers.Layer):
             }
         )
         return config
-
-
-
